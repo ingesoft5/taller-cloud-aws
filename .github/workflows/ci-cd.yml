@@ -1,0 +1,88 @@
+name: CI/CD Pipeline - Product Application
+
+# ==============================================================================
+# TALLER EVALUATIVO: AUTOMATIZACION CI/CD (INGENIERIA DE SOFTWARE V - ICESI)
+# ==============================================================================
+# Instrucciones:
+# Complete este archivo configurando los eventos y los 4 jobs descritos en la guia
+# y en la presentacion de clase:
+#
+#   Job 1: test-backend  (Pruebas unitarias Spring Boot + Subir Artefacto JAR)
+#   Job 2: test-frontend (Linting TypeScript + Compilacion Vite de la SPA)
+#   Job 3: build-docker  (Construccion Multi-Stage con Docker Buildx de API y Web)
+#   Job 4: smoke-test    (Levantamiento con Docker Compose + Prueba cURL al API)
+# ==============================================================================
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # ----------------------------------------------------------------------------
+  # JOB 1: VALIDACION Y PRUEBAS UNITARIAS BACKEND
+  # ----------------------------------------------------------------------------
+  # TODO: Configurar runner ubuntu-latest
+  # TODO: actions/checkout@v4
+  # TODO: actions/setup-java@v4 (Java 17, distribution: 'temurin', cache: 'maven')
+  # TODO: Ejecutar `mvn clean package` en backend/
+  # TODO: actions/upload-artifact@v4 (Subir backend/target/*.jar como 'backend-jar')
+  test-backend:
+    name: Backend Unit Tests & Package
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # [COMPLETAR AQUI LOS PASOS DEL JOB 1]
+
+  # ----------------------------------------------------------------------------
+  # JOB 2: VALIDACION Y COMPILACION FRONTEND
+  # ----------------------------------------------------------------------------
+  # TODO: Configurar runner ubuntu-latest
+  # TODO: actions/checkout@v4
+  # TODO: actions/setup-node@v4 (Node 20, cache: 'npm')
+  # TODO: Ejecutar `npm install`, `npm run lint` y `npm run build` en frontend/
+  test-frontend:
+    name: Frontend Lint & Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # [COMPLETAR AQUI LOS PASOS DEL JOB 2]
+
+  # ----------------------------------------------------------------------------
+  # JOB 3: CONSTRUCCION DE IMAGENES DOCKER (MULTI-STAGE)
+  # ----------------------------------------------------------------------------
+  # TODO: Declarar dependencias: needs: [test-backend, test-frontend]
+  # TODO: docker/setup-buildx-action@v3
+  # TODO: docker/build-push-action@v5 para backend (context: ./backend)
+  # TODO: docker/build-push-action@v5 para frontend (context: ./frontend)
+  build-docker:
+    name: Build Multi-Stage Docker Images
+    # needs: [ ... ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # [COMPLETAR AQUI LOS PASOS DEL JOB 3]
+
+  # ----------------------------------------------------------------------------
+  # JOB 4: DESPLIEGUE LOCAL Y PRUEBA DE HUMO (SMOKE TEST)
+  # ----------------------------------------------------------------------------
+  # TODO: Declarar dependencias: needs: [build-docker]
+  # TODO: Levantar stack con `docker compose up -d --build`
+  # TODO: Esperar disponibilidad y validar con `curl http://localhost:8080/api/products` (HTTP 200)
+  # TODO: Apagar contenedores con `docker compose down`
+  smoke-test:
+    name: Compose Up & Smoke Testing
+    # needs: [ ... ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # [COMPLETAR AQUI LOS PASOS DEL JOB 4]
